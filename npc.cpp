@@ -35,8 +35,7 @@ Npc::~Npc()
 
 void Npc::setName(const std::string &name)
 {
-    unsigned int name_size = 16;
-    if (name.length() > name_size)
+    if (name.length() > MAX_NAME_LENGTH)
     {
         name_ = name;
         return;
@@ -48,8 +47,7 @@ void Npc::setName(const std::string &name)
 
 void Npc::setLvl(int lvl)
 {
-    unsigned int lvl_cap = 1001;
-    if (lvl < lvl_cap)
+    if (lvl < LVL_CAP)
     {
         lvl_ = lvl;
         return;
@@ -61,8 +59,7 @@ void Npc::setLvl(int lvl)
 
 void Npc::setMaxHp(int hp)
 {
-    unsigned int hp_cap = 9999999;
-    if (hp < hp_cap)
+    if (hp < HP_CAP)
     {
         max_hp_ = hp;
         hp_ = max_hp_;
@@ -75,8 +72,7 @@ void Npc::setMaxHp(int hp)
 
 void Npc::setArmor(int armor)
 {
-    unsigned int armor_cap = 9999999;
-    if (armor < armor_cap)
+    if (armor < ARMOR_CAP)
     {
         armor_ = armor;
         return;
@@ -88,8 +84,7 @@ void Npc::setArmor(int armor)
 
 void Npc::setDmg(int dmg)
 {
-    unsigned int dmg_cap = 9999999;
-    if (dmg < dmg_cap)
+    if (dmg < DMG_CAP)
     {
         dmg_ = dmg;
         return;

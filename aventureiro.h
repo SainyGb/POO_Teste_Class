@@ -8,8 +8,8 @@ class Aventureiro
 {
 public:
     Aventureiro();
-    Aventureiro(const std::string &nm = "noName", int mhp = 0,
-                int arm = 0, int d = 0, int lv = 0);
+    Aventureiro(const std::string &nm, int mhp,
+                int arm, int d, int lv);
     Aventureiro(const Aventureiro &);
     ~Aventureiro();
 
@@ -26,6 +26,13 @@ public:
     int getArmor() const;
     int getDmg() const;
     int getLvl() const;
+
+    // STATS CAPS
+    static const int MAX_NAME_LENGTH = 16;
+    static const int HP_CAP = 9999999;
+    static const int ARMOR_CAP = 9999999;
+    static const int DMG_CAP = 9999999;
+    static const int LVL_CAP = 1001;
 
 private:
     std::string name_;

@@ -40,8 +40,7 @@ Aventureiro::~Aventureiro()
 // SETS
 void Aventureiro::setName(const std::string &name)
 {
-    unsigned int name_cap = 16;
-    if (name.length() < name_cap)
+    if (name.length() < MAX_NAME_LENGTH)
     {
         name_ = name;
         return;
@@ -52,8 +51,7 @@ void Aventureiro::setName(const std::string &name)
 
 void Aventureiro::setMaxHp(int hp)
 {
-    unsigned int hp_cap = 9999999;
-    if (hp > 0 & hp < hp_cap)
+    if (hp > 0 & hp < HP_CAP)
     {
         max_hp_ = hp;
         hp_ = max_hp_;
@@ -67,8 +65,7 @@ void Aventureiro::setMaxHp(int hp)
 
 void Aventureiro::setArmor(int armor)
 {
-    unsigned int armor_cap = 9999999;
-    if (armor > 0 & armor < armor_cap)
+    if (armor > 0 & armor < ARMOR_CAP)
     {
         armor_ = armor;
         return;
@@ -80,8 +77,7 @@ void Aventureiro::setArmor(int armor)
 
 void Aventureiro::setDmg(int dmg)
 {
-    unsigned int dmg_cap = 9999999;
-    if (dmg > 0 & dmg < dmg_cap)
+    if (dmg > 0 & dmg < DMG_CAP)
     {
         dmg_ = dmg;
         return;
@@ -92,8 +88,7 @@ void Aventureiro::setDmg(int dmg)
 
 void Aventureiro::setLvl(int lvl)
 {
-    unsigned int lvl_cap = 9999999;
-    if (lvl > 0 & lvl < lvl_cap)
+    if (lvl > 0 & lvl < LVL_CAP)
     {
         lvl_ = lvl;
         return;

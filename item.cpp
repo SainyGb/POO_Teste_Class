@@ -3,6 +3,7 @@
 
 #include "item.h"
 
+// ITEM CLASS
 Item::Item()
     : name_("noName"), description_("noDescription"), value_(0), qtd_(0)
 {
@@ -33,8 +34,7 @@ Item::~Item()
 
 void Item::setName(const std::string &n)
 {
-    unsigned int name_size = 16;
-    if (n.length() < name_size)
+    if (n.length() < MAX_NAME_LENGTH)
     {
         name_ = n;
         return;
@@ -45,8 +45,7 @@ void Item::setName(const std::string &n)
 
 void Item::setDescription(const std::string &d)
 {
-    unsigned int description_size = 500;
-    if (d.length() < description_size)
+    if (d.length() < MAX_DESC_LENGTH)
     {
         description_ = d;
         return;
@@ -57,8 +56,7 @@ void Item::setDescription(const std::string &d)
 
 void Item::setValue(int value)
 {
-    unsigned int value_cap = 9999999;
-    if (value < 0 & value < value_cap)
+    if (value < 0 & value < MAX_VALUE)
     {
         value_ = value;
         return;
@@ -69,8 +67,7 @@ void Item::setValue(int value)
 
 void Item::setQtd(int qtd)
 {
-    unsigned int qtd_cap = 9999999;
-    if (qtd < 0 & qtd < qtd_cap)
+    if (qtd < 0 & qtd < MAX_QTD)
     {
         qtd_ = qtd;
         return;
@@ -99,4 +96,73 @@ int Item::getValue() const
 int Item::getQtd() const
 {
     return qtd_;
+}
+
+//----------------------------------------------------------------
+// SWORD CLASS
+
+Swords::Swords()
+    : Item(), dmg_(0), durability_(0)
+{
+}
+
+Swords::Swords(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura)
+    : Item(n, d, value, qtd)
+{
+    setDmg(dg);
+    setDurability(dura);
+}
+
+Swords::Swords(const Item &cp, int dg, int dura)
+    : Item(cp)
+{
+    setDmg(dg);
+    setDurability(dura);
+}
+
+Swords::Swords(const Item &cpI, const Swords &cpS)
+    : Item(cpI)
+{
+    setDmg(cpS.getDmg());
+    setDurability(cpS.getDurability());
+}
+
+Swords::~Swords()
+{
+}
+
+// SETS AND GETS
+// SETS
+void Swords::setDmg(int dmg)
+{
+    if (dmg > 0 & dmg < MAX_DMG)
+    {
+        dmg_ = dmg;
+        return;
+    }
+    std::cout << "valor invalido\n";
+    dmg_ = 0;
+}
+
+void Swords::setDurability(int durability)
+{
+    if (durability > 0 & durability < MAX_DURA)
+    {
+        durability_ = durability;
+        return;
+    }
+    std::cout << "valor invalido\n";
+    durability_ = 0;
+}
+
+// GETS
+
+int Swords::getDmg() const
+{
+    return dmg_;
+}
+
+int Swords::getDurability() const
+{
+    return durability_;
 }
