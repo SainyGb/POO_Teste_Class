@@ -1,8 +1,10 @@
 #ifndef aventureiro_H_
-#define aventureiro _H_
+#define aventureiro_H_
 
 #include <iostream>
 #include <string>
+
+#include "item.h"
 
 class Aventureiro
 {
@@ -20,12 +22,23 @@ public:
     void setDmg(int dmg);
     void setLvl(int lvl);
 
+    // Equip and unequip items
+    void setEquipWeapon(const Weapons &w);
+    void setUnequipWeapon();
+
     // GETTERS
     std::string getName() const;
     int getMaxHp() const;
     int getArmor() const;
     int getDmg() const;
     int getLvl() const;
+    int getHp() const;
+
+    // Attack
+    void attack();
+
+    // equipped items
+    Weapons *EquippedSwords_;
 
     // STATS CAPS
     static const int MAX_NAME_LENGTH = 16;
@@ -41,6 +54,10 @@ private:
     int armor_;
     int dmg_;
     int lvl_;
+
+    // Items and Weapons
+
+    bool swordEquipped_;
 };
 
 #endif

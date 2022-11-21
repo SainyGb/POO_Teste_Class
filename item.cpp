@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include "item.h"
-
 // ITEM CLASS
 Item::Item()
     : name_("noName"), description_("noDescription"), value_(0), qtd_(0)
@@ -39,7 +37,7 @@ void Item::setName(const std::string &n)
         name_ = n;
         return;
     }
-    std::cout << "valor invalido\n";
+    std::cout << "valor invalido (setName)\n";
     name_ = "noName";
 }
 
@@ -50,29 +48,29 @@ void Item::setDescription(const std::string &d)
         description_ = d;
         return;
     }
-    std::cout << "valor invalido\n";
+    std::cout << "valor invalido (setDescription)\n";
     description_ = "noDescription";
 }
 
 void Item::setValue(int value)
 {
-    if (value < 0 & value < MAX_VALUE)
+    if (value >= 0 && value < MAX_VALUE)
     {
         value_ = value;
         return;
     }
-    std::cout << "valor invalido\n";
+    std::cout << "valor invalido (setValue)\n";
     value_ = 0;
 }
 
 void Item::setQtd(int qtd)
 {
-    if (qtd < 0 & qtd < MAX_QTD)
+    if (qtd > 0 && qtd < MAX_QTD)
     {
         qtd_ = qtd;
         return;
     }
-    std::cout << "valor invalido\n";
+    std::cout << "valor invalido (setQtd)\n";
     qtd_ = 0;
 }
 
@@ -99,32 +97,96 @@ int Item::getQtd() const
 }
 
 //----------------------------------------------------------------
-// SWORD CLASS
+// WEAPON CLASS
 
-Swords::Swords()
+Weapons::Weapons()
     : Item(), dmg_(0), durability_(0)
 {
 }
 
-Swords::Swords(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura)
+Weapons::Weapons(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura)
     : Item(n, d, value, qtd)
 {
     setDmg(dg);
     setDurability(dura);
 }
 
-Swords::Swords(const Item &cp, int dg, int dura)
+Weapons::Weapons(const Item &cp, int dg, int dura)
     : Item(cp)
 {
     setDmg(dg);
     setDurability(dura);
 }
 
-Swords::Swords(const Item &cpI, const Swords &cpS)
-    : Item(cpI)
+Weapons::Weapons(const Weapons &cpW)
+    : Item(cpW)
 {
-    setDmg(cpS.getDmg());
-    setDurability(cpS.getDurability());
+    setDmg(cpW.getDmg());
+    setDurability(cpW.getDurability());
+}
+
+Weapons::~Weapons()
+{
+}
+
+// SETS AND GETS
+// SETS
+void Weapons::setDmg(int dmg)
+{
+    if (dmg > 0 && dmg < MAX_DMG)
+    {
+        dmg_ = dmg;
+        return;
+    }
+    std::cout << "valor invalido (setDmg)\n";
+    dmg_ = 0;
+}
+
+void Weapons::setDurability(int durability)
+{
+    if (durability > 0 && durability < MAX_DURA)
+    {
+        durability_ = durability;
+        return;
+    }
+    std::cout << "valor invalido (setDurability)\n";
+    durability_ = 0;
+}
+
+// GETS
+
+int Weapons::getDmg() const
+{
+    return dmg_;
+}
+
+int Weapons::getDurability() const
+{
+    return durability_;
+}
+
+// SWORD CLASS
+Swords::Swords()
+    : Weapons(), autoSwingAttack_(false)
+{
+}
+
+Swords::Swords(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura, bool ast)
+    : Weapons(n, d, value, qtd, dg, dura)
+{
+    setAutoSwing(ast);
+}
+
+Swords::Swords(const Weapons &cpS, bool ast)
+    : Weapons(cpS)
+{
+    setAutoSwing(ast);
+}
+
+Swords::Swords(const Swords &cpS)
+    : Weapons(cpS)
+{
+    setAutoSwing(cpS.getAutoSwing());
 }
 
 Swords::~Swords()
@@ -133,36 +195,21 @@ Swords::~Swords()
 
 // SETS AND GETS
 // SETS
-void Swords::setDmg(int dmg)
+void Swords::setAutoSwing(bool ast)
 {
-    if (dmg > 0 & dmg < MAX_DMG)
-    {
-        dmg_ = dmg;
-        return;
-    }
-    std::cout << "valor invalido\n";
-    dmg_ = 0;
-}
-
-void Swords::setDurability(int durability)
-{
-    if (durability > 0 & durability < MAX_DURA)
-    {
-        durability_ = durability;
-        return;
-    }
-    std::cout << "valor invalido\n";
-    durability_ = 0;
+    autoSwingAttack_ = ast;
 }
 
 // GETS
 
-int Swords::getDmg() const
+bool Swords::getAutoSwing() const
 {
-    return dmg_;
+    return autoSwingAttack_;
 }
 
-int Swords::getDurability() const
+// Special properties
+
+void Swords::TripleSwingAttack() const
 {
-    return durability_;
+    std::cout << "Triple Swing Attack did: " << getDmg() * 3 << std::endl;
 }

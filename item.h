@@ -38,14 +38,14 @@ private:
 };
 
 // ----------------------------------------------------------------
-class Swords : public Item
+class Weapons : public Item
 {
 public:
-    Swords();
-    Swords(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura);
-    Swords(const Item &cp, int dg, int dura);
-    Swords(const Item &cp, const Swords &cps);
-    ~Swords();
+    Weapons();
+    Weapons(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura);
+    Weapons(const Item &cp, int dg, int dura);
+    Weapons(const Weapons &cpW);
+    ~Weapons();
 
     // SETTERS
     void setDmg(int dmg);
@@ -62,5 +62,32 @@ private:
     static const int MAX_DMG = 99999999;
     static const int MAX_DURA = 99999999;
 };
+
+class Swords : public Weapons
+{
+public:
+    Swords();
+    Swords(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura, bool ast);
+    Swords(const Weapons &cpW, bool ast);
+    Swords(const Swords &cpS);
+    ~Swords();
+
+    // SETTERS
+    void setAutoSwing(bool ast);
+    // GETTERS
+    bool getAutoSwing() const;
+
+    // Special properties
+    void TripleSwingAttack() const;
+
+private:
+    bool autoSwingAttack_;
+};
+
+// ----------------------------------------------------------------
+// class Armors : public Item
+// {
+// public:
+//     Armors :
 
 #endif
