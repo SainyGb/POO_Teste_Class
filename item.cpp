@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include "item.h"
+
 // ITEM CLASS
 Item::Item()
     : name_("noName"), description_("noDescription"), value_(0), qtd_(0)
@@ -73,11 +75,12 @@ bool Item::operator!=(const Item &cp)
     return !(*this == cp);
 }
 
-Item Item::operator!()
-{
-    qtd_++;
-    return *this;
-}
+// VER DEPOIS
+// Item Item::operator!()
+// {
+//     qtd_++;
+//     return *this;
+// }
 // SETS AND GETS
 // SETS
 
@@ -116,7 +119,7 @@ void Item::setValue(int value)
 
 void Item::setQtd(int qtd)
 {
-    if (qtd > 0 && qtd < MAX_QTD)
+    if (qtd > 0 && qtd <= MAX_QTD)
     {
         qtd_ = qtd;
         return;
@@ -153,7 +156,6 @@ Armors::Armors()
     : Item(), armor_(0)
 {
 }
-
 Armors::Armors(const std::string &n, const std::string &d, int value, int qtd, int arm)
     : Item(n, d, value, qtd)
 {
@@ -177,30 +179,45 @@ Armors::~Armors()
 }
 
 // OPERATORS
+
 const Armors &Armors::operator=(const Armors &armor)
 {
-    *static_cast<Item *>(this) = static_cast<Item>(armor);
+    //*static_cast<Item *>(this) = static_cast<Item>(armor);
 
-    armor_ = armor.armor_;
+    this->setName(armor.getName());
+    this->setValue(armor.getValue());
+    this->setDescription(armor.getDescription());
+    this->setQtd(armor.getQtd());
+    this->setArmor(armor.getArmor());
 
     return *this;
 }
 
 std::ostream &operator<<(std::ostream &out, const Armors &armor)
 {
-    out << static_cast<Item>(armor);
-    out << "Armor: " << armor.armor_ << std::endl;
-
+    out << armor.getStats() << std::endl;
     return out;
 }
 
 bool Armors::operator==(const Armors &cp)
 {
-    if (static_cast<Item>(*this) != static_cast<Item>(cp))
+    if (this->getName() != cp.getName())
     {
         return false;
     }
-    if (armor_ != cp.armor_)
+    if (this->getValue() != cp.getValue())
+    {
+        return false;
+    }
+    if (this->getDescription() != cp.getDescription())
+    {
+        return false;
+    }
+    if (this->getQtd() != cp.getQtd())
+    {
+        return false;
+    }
+    if (this->getArmor() != cp.getArmor())
     {
         return false;
     }
@@ -238,325 +255,18 @@ int Armors::getArmor() const
     return armor_;
 }
 
-//----------------------------------------------------------------
-// POCOES CLASS
+// VIRTUAL FUNCTIONS
 
-Pocoes::Pocoes()
-    : Weapons(), poder_(0)
+std::string Armors::getStats() const
 {
+    std::string str =
+        " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Armor: " + std::to_string(this->getArmor());
+
+    return str;
 }
 
-Pocoes::Pocoes(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura, int pd)
-    : Weapons(n, d, value, qtd, dg, dura)
+// VIRTUAL FUNCTIONS
+Armors *Armors::clone() const
 {
-    setPoder(pd);
+    return new Armors(*this);
 }
-
-Pocoes::Pocoes(const Weapons &cp, int pd)
-    : Weapons(cp)
-{
-    setPoder(pd);
-}
-
-Pocoes::Pocoes(const Pocoes &cpP)
-    : Weapons(cpP)
-{
-    setPoder(cpP.getPoder());
-}
-
-// OPERATORS
-const Pocoes &Pocoes::operator=(const Pocoes &pocoes)
-{
-    *static_cast<Weapons *>(this) = static_cast<Weapons>(pocoes);
-
-    poder_ = pocoes.poder_;
-
-    return *this;
-}
-
-std::ostream &operator<<(std::ostream &out, const Pocoes &pocoes)
-{
-    out << static_cast<Weapons>(pocoes);
-    out << "Poder da Pocao: " << pocoes.poder_ << std::endl;
-
-    return out;
-}
-
-bool Pocoes::operator==(const Pocoes &cp)
-{
-    if (static_cast<Pocoes>(*this) != static_cast<Pocoes>(cp))
-    {
-        return false;
-    }
-    if (poder_ != cp.poder_)
-    {
-        return false;
-    }
-    return true;
-}
-
-bool Pocoes::operator!=(const Pocoes &cp)
-{
-    return !(*this == cp);
-}
-
-Pocoes Pocoes::operator!()
-{
-    poder_++;
-    return *this;
-}
-
-// SETS AND GETS
-//  SETS
-void Pocoes::setPoder(int poder)
-{
-    if (poder > 0 && poder < MAX_PODER)
-    {
-        poder_ = poder;
-        return;
-    }
-    std::cout << "valor invalido (setPoder)" << std::endl;
-    return;
-}
-// GETS
-int Pocoes::getPoder() const
-{
-    return poder_;
-}
-
-Pocoes::~Pocoes()
-{
-}
-
-//----------------------------------------------------------------
-// WEAPON CLASS
-
-Weapons::Weapons() : Item(), dmg_(0), durability_(0)
-{
-}
-
-Weapons::Weapons(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura)
-    : Item(n, d, value, qtd)
-{
-    setDmg(dg);
-    setDurability(dura);
-}
-
-Weapons::Weapons(const Item &cp, int dg, int dura)
-    : Item(cp)
-{
-    setDmg(dg);
-    setDurability(dura);
-}
-
-Weapons::Weapons(const Weapons &cpW)
-    : Item(cpW)
-{
-    setDmg(cpW.getDmg());
-    setDurability(cpW.getDurability());
-}
-
-Weapons::~Weapons()
-{
-}
-
-// OPERATORS
-const Weapons &Weapons::operator=(const Weapons &weapon)
-{
-    *static_cast<Item *>(this) = static_cast<Item>(weapon);
-
-    dmg_ = weapon.dmg_;
-    durability_ = weapon.durability_;
-
-    return *this;
-}
-
-std::ostream &operator<<(std::ostream &out, const Weapons &weapon)
-{
-    out << static_cast<Item>(weapon);
-    out << "Damage: " << weapon.dmg_ << std::endl;
-    out << "Durability: " << weapon.durability_ << std::endl;
-
-    return out;
-}
-
-bool Weapons::operator==(const Weapons &cp)
-{
-    if (static_cast<Item>(*this) != static_cast<Item>(cp))
-    {
-        return false;
-    }
-    if (dmg_ != cp.dmg_)
-    {
-        return false;
-    }
-    if (durability_ != cp.durability_)
-    {
-        return false;
-    }
-    return true;
-}
-
-bool Weapons::operator!=(const Weapons &cp)
-{
-    return !(*this == cp);
-}
-
-Weapons Weapons::operator!()
-{
-    durability_++;
-    return *this;
-}
-
-// SETS AND GETS
-// SETS
-void Weapons::setDmg(int dmg)
-{
-    if (dmg > 0 && dmg < MAX_DMG)
-    {
-        dmg_ = dmg;
-        return;
-    }
-    std::cout << "valor invalido (setDmg)\n";
-    dmg_ = 0;
-}
-
-void Weapons::setDurability(int durability)
-{
-    if (durability > 0 && durability < MAX_DURA)
-    {
-        durability_ = durability;
-        return;
-    }
-    std::cout << "valor invalido (setDurability)\n";
-    durability_ = 0;
-}
-
-// GETS
-
-int Weapons::getDmg() const
-{
-    return dmg_;
-}
-
-int Weapons::getDurability() const
-{
-    return durability_;
-}
-
-// MagicWeapons CLASS
-MagicWeapons::MagicWeapons()
-    : Weapons(), element_(0), power_level_(0)
-{
-}
-
-MagicWeapons::MagicWeapons(const std::string &n, const std::string &d, int value, int qtd, int dg, int dura, int el, int pw)
-    : Weapons(n, d, value, qtd, dg, dura)
-{
-    setElement(el);
-    setPowerLvl(pw);
-}
-
-MagicWeapons::MagicWeapons(const Weapons &cpS, int el, int pw)
-    : Weapons(cpS)
-{
-    setElement(el);
-    setPowerLvl(pw);
-}
-
-MagicWeapons::MagicWeapons(const MagicWeapons &cpS)
-    : Weapons(cpS)
-{
-    setElement(cpS.getElement());
-    setPowerLvl(cpS.getPowerLvl());
-}
-
-MagicWeapons::~MagicWeapons()
-{
-}
-
-// OPERATORS
-const MagicWeapons &MagicWeapons::operator=(const MagicWeapons &mw)
-{
-    *static_cast<Weapons *>(this) = static_cast<Weapons>(mw);
-
-    element_ = mw.element_;
-    power_level_ = mw.power_level_;
-
-    return *this;
-}
-
-std::ostream &operator<<(std::ostream &out, const MagicWeapons &mw)
-{
-    out << static_cast<Weapons>(mw);
-    out << "Tipo do elemento: " << mw.element_ << std::endl;
-    out << "Porcentagem de Mana infundida: " << mw.power_level_ << "%" << std::endl;
-
-    return out;
-}
-
-bool MagicWeapons::operator==(const MagicWeapons &cp)
-{
-    if (static_cast<MagicWeapons>(*this) != static_cast<MagicWeapons>(cp))
-    {
-        return false;
-    }
-    if (element_ != cp.element_)
-    {
-        return false;
-    }
-    if (power_level_ != cp.power_level_)
-    {
-        return false;
-    }
-    return true;
-}
-
-bool MagicWeapons::operator!=(const MagicWeapons &cp)
-{
-    return !(*this == cp);
-}
-
-MagicWeapons MagicWeapons::operator!()
-{
-    power_level_++;
-    return *this;
-}
-
-// SETS AND GETS
-// SETS
-void MagicWeapons::setElement(int ele)
-{
-    if (ele >= 0 && ele <= 5)
-    {
-        element_ = ele;
-        return;
-    }
-    std::cout << "valor invalido (setElement)" << std::endl;
-    element_ = 0;
-    return;
-}
-
-void MagicWeapons::setPowerLvl(int p)
-{
-    if (p > 0 && p <= 100)
-    {
-        power_level_ = p;
-        return;
-    }
-    std::cout << "valor invalido (setPowerLvl)" << std::endl;
-    power_level_ = 1;
-    return;
-}
-
-// GETS
-int MagicWeapons::getElement() const
-{
-    return element_;
-}
-
-int MagicWeapons::getPowerLvl() const
-{
-    return power_level_;
-}
-// Special properties

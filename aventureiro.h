@@ -5,9 +5,13 @@
 #include <string>
 
 #include "item.h"
+#include "inventario.h"
+#include "weapons.h"
 
 class Aventureiro
 {
+    friend std::ostream &operator<<(std::ostream &, const Aventureiro &);
+
 public:
     Aventureiro();
     Aventureiro(const std::string &nm, int mhp,
@@ -18,36 +22,38 @@ public:
     // SETTERS
     void setName(const std::string &name);
     void setMaxHp(int hp);
-    void setArmor(int arm);
+    void setDef(int arm);
     // void setDmg(int dmg);
     void setLvl(int lvl);
-
-    // Equip and unequip items
-    void setEquipArmor(const Armors &a);
-    void setEquipWeapon(const Weapons &w);
-
-    void setUnequipArmor();
-    void setUnequipWeapon();
 
     // GETTERS
     std::string getName() const;
     int getMaxHp() const;
-    int getArmor() const;
+    int getHp() const;
+    int getDef() const;
     // int getDmg() const;
     int getLvl() const;
-    int getHp() const;
 
-    // Attack
-    void attack();
+    // Combat tags
+    bool isAlive() const;
+
+    // INVETORY FUNCTIONS
+    void addItem(const Item &item) { this->inventory.addItem(item); }
+    void removeItem(const int index);
+    const Item &getItem(const int index);
+    inline const int getInventorySize() const { return this->inventory.size(); }
+    std::string getInv();
+    // Equip and unequip items
+    void equipItem(unsigned index);
 
     // equip items
-    Weapons *EquippedSwords_;
-    MagicWeapons *EquippedMagicSwords_;
+    MagicWeapons magicWeapons_;
+    Armors armor_;
 
     // STATS CAPS
     static const int MAX_NAME_LENGTH = 16;
     static const int HP_CAP = 9999999;
-    static const int ARMOR_CAP = 9999999;
+    static const int DEF_CAP = 9999999;
     // static const int DMG_CAP = 9999999;
     static const int LVL_CAP = 1001;
 
@@ -55,9 +61,12 @@ private:
     std::string name_;
     int max_hp_;
     int hp_;
-    int armor_;
+    int def_;
     // int dmg_;
     int lvl_;
+
+    // Inventory
+    Inventory inventory;
 
     // Items and Weapons
     bool armorEquipped_;
