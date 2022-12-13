@@ -49,6 +49,8 @@ public:
     // equip items
     MagicWeapons magicWeapons_;
     Armors armor_;
+    Murasama marasama;
+    Excalibur excalibur;
 
     // STATS CAPS
     static const int MAX_NAME_LENGTH = 16;

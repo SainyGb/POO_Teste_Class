@@ -50,6 +50,7 @@ int main(int argc, char **argv)
     int element = 0;
     int power_level = 1;
     MagicWeapons Stick("Stick", "What powers does it hold?", value, qtd, maxDmg, minDmg, durability, element, power_level);
+    Murasama mura("Murasama", "What powers does it hold?", 1000, 1, 150, 120, 100, 10, false, 0);
     // std::cout << Stick << std::endl;
     // std::cout << std::endl;
 
@@ -79,13 +80,11 @@ int main(int argc, char **argv)
     Daniell.addItem(Stick);
     Daniell.addItem(armor);
     Daniell.addItem(armor2);
-    std::cout << Daniell.getInv();
-    armor = armor2;
-
-    Daniell.addItem(armor);
-    Daniell.addItem(armor2);
+    Daniell.addItem(mura);
 
     std::cout << Daniell.getInv();
+
+    std::cout << mura.getStats();
 
     // Equipping the weapon
     // std::cout << "Equipando equipamento" << std::endl;

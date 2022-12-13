@@ -443,6 +443,10 @@ int Swords::getPoder() const
 // VIRTUAL FUNCTIONS
 std::string Swords::getStats() const
 {
+    std::string str =
+        " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
+        " | Durability: " + std::to_string(this->getDurability()) + " | Poder: " + std::to_string(this->getPoder());
+    return str;
 }
 
 Swords *Swords::clone() const
@@ -567,7 +571,7 @@ int Murasama::lingchi()
     if (getHiddenPower())
     {
         lockHiddenPower();
-        return this->attack() * (int)(350 / 100);
+        return this->getPoder() * (attack() * (int)(350 / 100));
     }
 }
 
@@ -615,7 +619,8 @@ std::string Murasama::getStats() const
 {
     std::string str =
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
-        " | Durability: " + std::to_string(this->getDurability()) + " | Rage Meter: " + std::to_string(this->getRagePool()) + "/100";
+        " | Durability: " + std::to_string(this->getDurability()) + " | Rage Meter: " + std::to_string(this->getRagePool()) + "/100" + " | Poder: " + std::to_string(this->getPoder());
+    return str;
 }
 
 Murasama *Murasama::clone() const
@@ -631,11 +636,11 @@ int Murasama::attack()
     if (getHiddenPower())
     {
         decreaseRagePool();
-        return (int)((double)(125.0 / 100.0) * (double)(rand() % getMaxDmg() + getMinDmg()));
+        return getPoder() * (int)((double)(125.0 / 100.0) * (double)(rand() % getMaxDmg() + getMinDmg()));
     }
     increaseRagePool();
     durabilityDmg();
-    return (rand() % getMaxDmg() + getMinDmg());
+    return getPoder() * (rand() % getMaxDmg() + getMinDmg());
 }
 
 //----------------------------------------------------------------
@@ -752,11 +757,11 @@ int Excalibur::excalibur()
     if (getEnergy() >= 100)
     {
         resetEnergy();
-        return (int)(attack() * (825.0 / 100.0));
+        return getPoder() * (int)(attack() * (825.0 / 100.0));
     }
     std::cout << "Excalibur ainda nao estava pronta para liberar seu poder..." << std::endl;
     resetEnergy();
-    return (int)(attack() + (attack() * (getEnergy() / 100)));
+    return getPoder() * (int)(attack() + (attack() * (getEnergy() / 100)));
 }
 
 // VIRTUAL FUNCTIONS
@@ -764,7 +769,8 @@ std::string Excalibur::getStats() const
 {
     std::string str =
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
-        " | Durability: " + std::to_string(this->getDurability()) + " | Energy Pool: " + std::to_string(this->getEnergy()) + "/100";
+        " | Durability: " + std::to_string(this->getDurability()) + " | Energy Pool: " + std::to_string(this->getEnergy()) + "/100" + " | Poder: " + std::to_string(this->getPoder());
+    return str;
 }
 
 Excalibur *Excalibur::clone() const
@@ -777,5 +783,5 @@ int Excalibur::attack()
     int minDmg, maxDmg;
     minDmg = getMinDmg();
     maxDmg = getMaxDmg();
-    return (rand() % maxDmg + minDmg);
+    return getPoder() * (rand() % maxDmg + minDmg);
 }
