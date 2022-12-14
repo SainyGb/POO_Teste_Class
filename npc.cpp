@@ -4,26 +4,26 @@
 #include "npc.h"
 
 Npc::Npc()
-    : name_("noName"), lvl_(0), max_hp_(0), hp_(max_hp_), armor_(0), dmg_(0)
+    : name_("Bandido"), max_hp_(100), hp_(max_hp_), armor_(0), minDmg_(10), maxDmg_(15)
 {
 }
 
-Npc::Npc(const std::string &name, int lvl, int mhp, int arm, int dmg)
+Npc::Npc(const std::string &name, int mhp, int arm, int mxdmg, int mdmg)
 {
     setName(name);
-    setLvl(lvl);
     setMaxHp(mhp);
     setArmor(arm);
-    setDmg(dmg);
+    setMinDmg(mdmg);
+    setMaxDmg(mxdmg);
 }
 
 Npc::Npc(const Npc &cp)
 {
     setName(cp.getName());
-    setLvl(cp.getLvl());
     setMaxHp(cp.getMaxHp());
     setArmor(cp.getArmor());
-    setDmg(cp.getDmg());
+    setMinDmg(cp.getMinDmg());
+    setMaxDmg(cp.getMaxDmg());
 }
 
 Npc::~Npc()
@@ -35,7 +35,7 @@ Npc::~Npc()
 
 void Npc::setName(const std::string &name)
 {
-    if (name.length() > MAX_NAME_LENGTH)
+    if (name.length() < MAX_NAME_LENGTH)
     {
         name_ = name;
         return;
@@ -45,52 +45,29 @@ void Npc::setName(const std::string &name)
     return;
 }
 
-void Npc::setLvl(int lvl)
-{
-    if (lvl < LVL_CAP)
-    {
-        lvl_ = lvl;
-        return;
-    }
-    std::cout << "valor invalido\n";
-    lvl_ = 0;
-    return;
-}
-
 void Npc::setMaxHp(int hp)
 {
-    if (hp < HP_CAP)
+    if (hp >= 0 && hp < HP_CAP)
     {
         max_hp_ = hp;
         hp_ = max_hp_;
         return;
     }
-    std::cout << "valor invalido\n";
-    hp_ = 0;
-    return;
+
+    std::cout << "valor invalido (setMaxHp) \n";
+    max_hp_ = 0;
+    hp_ = max_hp_;
 }
 
 void Npc::setArmor(int armor)
 {
-    if (armor < ARMOR_CAP)
+    if (armor >= 0 && armor < ARMOR_CAP)
     {
         armor_ = armor;
         return;
     }
-    std::cout << "valor invalido\n";
+    std::cout << "valor invalido (setArmor)\n";
     armor_ = 0;
-    return;
-}
-
-void Npc::setDmg(int dmg)
-{
-    if (dmg < DMG_CAP)
-    {
-        dmg_ = dmg;
-        return;
-    }
-    std::cout << "valor invalido\n";
-    dmg_ = 0;
     return;
 }
 
@@ -99,11 +76,6 @@ void Npc::setDmg(int dmg)
 std::string Npc::getName() const
 {
     return name_;
-}
-
-int Npc::getLvl() const
-{
-    return lvl_;
 }
 
 int Npc::getMaxHp() const
@@ -116,7 +88,65 @@ int Npc::getArmor() const
     return armor_;
 }
 
-int Npc::getDmg() const
+int Npc::getHp() const
 {
-    return dmg_;
+    return hp_;
+}
+
+// COMBAT FUNCTIONS
+bool Npc::isAlive() const
+{
+    return this->hp_ > 0;
+}
+
+int Npc::takeDamage(int damage)
+{
+    int totalDamage = damage - getArmor();
+    if (totalDamage > 0)
+    {
+        hp_ -= totalDamage;
+        return totalDamage;
+    }
+    if (this->hp_ <= 0)
+    {
+        this->hp_ = 0;
+        return totalDamage;
+    }
+}
+
+void Npc::setMinDmg(int dmg)
+{
+    if (dmg > 0)
+    {
+        minDmg_ = dmg;
+        return;
+    }
+    std::cout << "valor invalido (setDmg)\n";
+    minDmg_ = 0;
+}
+
+void Npc::setMaxDmg(int dmg)
+{
+    if (dmg > 0)
+    {
+        maxDmg_ = dmg;
+        return;
+    }
+    std::cout << "valor invalido (setDmg)\n";
+    maxDmg_ = 0;
+}
+
+int Npc::getMinDmg() const
+{
+    return minDmg_;
+}
+
+int Npc::getMaxDmg() const
+{
+    return maxDmg_;
+}
+
+int Npc::attack() const
+{
+    return rand() % getMaxDmg() + getMinDmg();
 }

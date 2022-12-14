@@ -8,7 +8,6 @@
 
 class Weapons : public Item
 {
-    friend std::ostream &operator<<(std::ostream &, const Weapons &);
 
 public:
     Weapons();
@@ -24,14 +23,6 @@ public:
     virtual Weapons *clone() const = 0;
     virtual std::string getStats() const = 0;
     virtual int attack() = 0;
-
-    // OPERATORS
-    // VOLTAR DPS
-    const Weapons &
-    operator=(const Weapons &);
-    bool operator==(const Weapons &);
-    bool operator!=(const Weapons &);
-    // Weapons operator!();
 
     // SETTERS
     void setMinDmg(int dmg);
@@ -71,7 +62,6 @@ public:
     virtual ~MagicWeapons();
 
     // OPERATORS
-    // VER DEPOIS
     const MagicWeapons &operator=(const MagicWeapons &);
     bool operator==(const MagicWeapons &);
     bool operator!=(const MagicWeapons &);
@@ -83,14 +73,17 @@ public:
     int getElement() const;
     int getPowerLvl() const;
 
+    // FUNCTIONS
+    int magicMissiles();
+
     // VIRTUAL FUNCTIONS
     std::string getStats() const;
     MagicWeapons *clone() const;
     int attack();
 
 private:
-    int element_;     // coming soon (will be usable as a modifier for the damage type)
-    int power_level_; // defines the dmg multiplier (will range from 1 to 100)
+    int element_;
+    int power_level_;
 };
 
 class Swords : public Weapons
@@ -115,7 +108,7 @@ public:
     int getPoder() const;
 
     // FUNCTIONS
-    // int useAbility() const;
+    int doubleSLice();
 
     // VIRTUAL FUNCTIONS
     std::string getStats() const;

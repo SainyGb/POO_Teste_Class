@@ -32,66 +32,6 @@ Weapons::~Weapons()
 {
 }
 
-// OPERATORS
-// VER DEPOIS
-const Weapons &Weapons::operator=(const Weapons &weapon)
-{
-    this->setName(weapon.getName());
-    this->setValue(weapon.getValue());
-    this->setDescription(weapon.getDescription());
-    this->setQtd(weapon.getQtd());
-    this->setMinDmg(weapon.getMinDmg());
-    this->setMaxDmg(weapon.getMaxDmg());
-    this->setDurability(weapon.getDurability());
-
-    return *this;
-}
-
-std::ostream &operator<<(std::ostream &out, const Weapons &weapon)
-{
-    out << weapon.getStats() << std::endl;
-    return out;
-}
-
-bool Weapons::operator==(const Weapons &cp)
-{
-
-    if (this->getName() != cp.getName())
-    {
-        return false;
-    }
-    if (this->getValue() != cp.getValue())
-    {
-        return false;
-    }
-    if (this->getDescription() != cp.getDescription())
-    {
-        return false;
-    }
-    if (this->getQtd() != cp.getQtd())
-    {
-        return false;
-    }
-    if (this->getMinDmg() != cp.getMinDmg())
-    {
-        return false;
-    }
-    if (this->getMaxDmg() != cp.getMaxDmg())
-    {
-        return false;
-    }
-    if (this->getDurability() != cp.getDurability())
-    {
-        return false;
-    }
-    return true;
-}
-
-bool Weapons::operator!=(const Weapons &cp)
-{
-    return !(*this == cp);
-}
-
 // Weapons Weapons::operator!()
 // {
 //     durability_++;
@@ -163,6 +103,9 @@ void Weapons::durabilityDmg()
 
 void Weapons::breakWeapons()
 {
+    setMaxDmg(0);
+    setMinDmg(0);
+    std::cout << "A arma esta danificada demais para ser efetiva, troque a arma" << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -302,6 +245,12 @@ int MagicWeapons::getPowerLvl() const
     return power_level_;
 }
 
+// FUNCTIONS
+int MagicWeapons::magicMissiles()
+{
+    return attack() * rand() % 5 + 1;
+}
+
 // VIRTUAL FUNCTIONS
 std::string MagicWeapons::getStats() const
 {
@@ -309,7 +258,7 @@ std::string MagicWeapons::getStats() const
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Damage: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
         " | Durability: " +
         std::to_string(this->getDurability()) + " | Element: " + std::to_string(this->getElement()) +
-        " | Power Level: " + std::to_string(this->getPowerLvl());
+        " | Power Level: " + std::to_string(this->getPowerLvl()) + "\n";
 
     return str;
 }
@@ -440,12 +389,19 @@ int Swords::getPoder() const
     return poder_;
 }
 
+// FUNCTIONS
+int Swords::doubleSLice()
+{
+    return (int)((double)attack() * 1.5);
+}
+
 // VIRTUAL FUNCTIONS
-std::string Swords::getStats() const
+std::string
+Swords::getStats() const
 {
     std::string str =
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
-        " | Durability: " + std::to_string(this->getDurability()) + " | Poder: " + std::to_string(this->getPoder());
+        " | Durability: " + std::to_string(this->getDurability()) + " | Poder: " + std::to_string(this->getPoder()) + "\n";
     return str;
 }
 
@@ -619,7 +575,7 @@ std::string Murasama::getStats() const
 {
     std::string str =
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
-        " | Durability: " + std::to_string(this->getDurability()) + " | Rage Meter: " + std::to_string(this->getRagePool()) + "/100" + " | Poder: " + std::to_string(this->getPoder());
+        " | Durability: " + std::to_string(this->getDurability()) + " | Rage Meter: " + std::to_string(this->getRagePool()) + "/100" + " | Poder: " + std::to_string(this->getPoder()) + "\n";
     return str;
 }
 
@@ -769,7 +725,7 @@ std::string Excalibur::getStats() const
 {
     std::string str =
         " | Name: " + this->getName() + " | Description: " + this->getDescription() + " | Value: " + std::to_string(this->getValue()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) +
-        " | Durability: " + std::to_string(this->getDurability()) + " | Energy Pool: " + std::to_string(this->getEnergy()) + "/100" + " | Poder: " + std::to_string(this->getPoder());
+        " | Durability: " + std::to_string(this->getDurability()) + " | Energy Pool: " + std::to_string(this->getEnergy()) + "/100" + " | Poder: " + std::to_string(this->getPoder()) + "\n";
     return str;
 }
 

@@ -1,105 +1,110 @@
-#include <iostream>
-#include <string>
+// #ifndef POCOES_H
+// #define POCOES_H
 
-#include "item.h"
+// #include <iostream>
+// #include <string>
 
-class Pocoes : public Item
-{
-    friend std::ostream &operator<<(std::ostream &, const Pocoes &);
+// #include "item.h"
 
-public:
-    Pocoes();
-    Pocoes(std::string &n, std::string &dp, int v, int q, int p, int d);
-    Pocoes(const Pocoes &);
-    virtual ~Pocoes();
+// class Pocoes : public Item
+// {
+//     friend std::ostream &operator<<(std::ostream &, const Pocoes &);
 
-    // OPERATORS
-    const Pocoes &operator=(const Pocoes &);
-    bool operator==(const Pocoes &);
-    bool operator!=(const Pocoes &);
-    // Pocoes operator!();
+// public:
+//     Pocoes();
+//     Pocoes(std::string &n, std::string &dp, int v, int q, int p, int d);
+//     Pocoes(const Pocoes &);
+//     virtual ~Pocoes();
 
-    // SETTERS
-    void setPoder(int p);
-    void setDuracao(int d);
-    // GETTERS
-    int getPoder() const;
-    int getDuracao() const;
+//     // OPERATORS
+//     const Pocoes &operator=(const Pocoes &);
+//     bool operator==(const Pocoes &);
+//     bool operator!=(const Pocoes &);
+//     // Pocoes operator!();
 
-    // FUNCTIONS
-    int duracaoTotal() const;
+//     // SETTERS
+//     void setPoder(int p);
+//     void setDuracao(int d);
+//     // GETTERS
+//     int getPoder() const;
+//     int getDuracao() const;
 
-    // VIRTUAL FUNCTIONS
-    Item *clone() const = 0;
-    std::string getStats() const = 0;
+//     // FUNCTIONS
+//     int duracaoTotal() const;
 
-private:
-    int poder_; // efetividade da poção
-    int duracao_;
-};
+//     // VIRTUAL FUNCTIONS
+//     Item *clone() const = 0;
+//     std::string getStats() const = 0;
 
-class PocaoCura : public Pocoes
-{
-    friend std::ostream &operator<<(std::ostream &, const PocaoCura &);
+// private:
+//     int poder_; // efetividade da poção
+//     int duracao_;
+// };
 
-public:
-    PocaoCura();
-    PocaoCura(std::string &n, std::string &dp, int v, int q, int p, int d, int vc);
-    PocaoCura(const PocaoCura &);
-    ~PocaoCura();
+// class PocaoCura : public Pocoes
+// {
+//     friend std::ostream &operator<<(std::ostream &, const PocaoCura &);
 
-    // OPERATORS
-    const PocaoCura &operator=(const PocaoCura &);
-    bool operator==(const PocaoCura &);
-    bool operator!=(const PocaoCura &);
-    PocaoCura operator!();
+// public:
+//     PocaoCura();
+//     PocaoCura(std::string &n, std::string &dp, int v, int q, int p, int d, int vc);
+//     PocaoCura(const PocaoCura &);
+//     ~PocaoCura();
 
-    // SETTERS
-    void setValorCura(int v);
-    // GETTERS
-    int getValorCura() const;
+//     // OPERATORS
+//     const PocaoCura &operator=(const PocaoCura &);
+//     bool operator==(const PocaoCura &);
+//     bool operator!=(const PocaoCura &);
+//     PocaoCura operator!();
 
-    // FUNCTIONS
-    int curaTotal() const;
+//     // SETTERS
+//     void setValorCura(int v);
+//     // GETTERS
+//     int getValorCura() const;
 
-    // VIRTUAL FUNCTIONS
-    PocaoCura *clone() const;
-    std::string getStats() const;
+//     // FUNCTIONS
+//     int curaTotal() const;
 
-private:
-    int valorCura_;
-    static const int HP_CAP = 9999999;
-};
+//     // VIRTUAL FUNCTIONS
+//     PocaoCura *clone() const;
+//     std::string getStats() const;
 
-class PocaoDef : public Pocoes
-{
-    friend std::ostream &operator<<(std::ostream &, const PocaoDef &);
+// private:
+//     int valorCura_;
+//     static const int HP_CAP = 9999999;
+// };
 
-public:
-    PocaoDef();
-    PocaoDef(std::string &n, std::string &dp, int v, int q, int p, int d, int df);
-    PocaoDef(const PocaoDef &);
-    ~PocaoDef();
+// class PocaoDef : public Pocoes
+// {
+//     friend std::ostream &operator<<(std::ostream &, const PocaoDef &);
 
-    // OPERATORS
-    const PocaoDef &operator=(const PocaoDef &);
-    bool operator==(const PocaoDef &);
-    bool operator!=(const PocaoDef &);
-    PocaoDef operator!();
+// public:
+//     PocaoDef();
+//     PocaoDef(std::string &n, std::string &dp, int v, int q, int p, int d, int df);
+//     PocaoDef(const PocaoDef &);
+//     ~PocaoDef();
 
-    // SETTERS
-    void setValorDef(int v);
-    // GETTERS
-    int getValorDef() const;
+//     // OPERATORS
+//     const PocaoDef &operator=(const PocaoDef &);
+//     bool operator==(const PocaoDef &);
+//     bool operator!=(const PocaoDef &);
+//     PocaoDef operator!();
 
-    // FUNCTIONS
-    int defTotal() const;
+//     // SETTERS
+//     void setValorDef(int v);
+//     // GETTERS
+//     int getValorDef() const;
 
-    // VIRTUAL FUNCTIONS
-    PocaoDef *clone() const;
-    std::string getStats() const;
+//     // FUNCTIONS
+//     int defTotal() const;
 
-private:
-    int valorDef_;
-    static const int DEF_CAP = 9999999;
-};
+//     // VIRTUAL FUNCTIONS
+//     PocaoDef *clone() const;
+//     std::string getStats() const;
+
+// private:
+//     int valorDef_;
+//     static const int DEF_CAP = 9999999;
+// };
+
+// #endif //

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <typeinfo>
 
 #include "aventureiro.h"
 #include "item.h"
@@ -9,12 +10,9 @@
 // MAS SE TU DECIDIR QUE TA MTO EM CIMA DA HORA, SO REVERTER PARA O COMMIT QUE TA TUDO CERTO
 
 Aventureiro::Aventureiro()
-    : name_("noName"), max_hp_(0), hp_(max_hp_), def_(0), /*dmg_(0),*/ lvl_(0)
+    : name_("noName"), max_hp_(0), hp_(max_hp_), def_(0)
 
 {
-    // EquippedSwords_ = new Weapons("Rock", "Yes. That is it, a rock.", 0, 1, 1, 9999);
-    swordEquipped_ = false;
-    armorEquipped_ = false;
 }
 
 Aventureiro::Aventureiro(
@@ -24,11 +22,6 @@ Aventureiro::Aventureiro(
     setName(nm);
     setMaxHp(mhp);
     setDef(amr);
-    // setDmg(d);
-    setLvl(lv);
-    // EquippedSwords_ = new Weapons("Rock", "Yes. That is it, a rock.", 0, 1, 1, 9999);
-    swordEquipped_ = false;
-    armorEquipped_ = false;
 }
 
 Aventureiro::Aventureiro(const Aventureiro &cp)
@@ -36,15 +29,36 @@ Aventureiro::Aventureiro(const Aventureiro &cp)
     setName(cp.getName());
     setMaxHp(cp.getMaxHp());
     setDef(cp.getDef());
-    // setDmg(cp.getDmg());
-    setLvl(cp.getLvl());
-    // EquippedSwords_ = new Weapons("Rock", "Yes. That is it, a rock.", 0, 1, 1, 9999);
-    swordEquipped_ = false;
-    armorEquipped_ = false;
 }
 
 Aventureiro::~Aventureiro()
 {
+}
+
+void Aventureiro::inicializar(const std::string name)
+{
+    this->distanceTravelled = 0;
+    this->setName(name);
+    this->setMaxHp(250);
+    Armors plate("Iron Plate", "Just a normal armor", 10, 1, 20, 100);
+    Swords sword("Iron Sword", "A simple iron sword", 10, 1, 45, 35, 20, 1);
+    addItem(sword);
+    addItem(plate);
+    equipItem(0);
+    equipItem(0);
+    invPocoes.push_back(new PocaoCura("Pocao de Cura", "Pocao que cura voce", 100, 1, 1, 0, 50));
+    invPocoes.push_back(new PocaoCura("Pocao de Cura", "Pocao que cura voce", 100, 1, 1, 0, 50));
+    invPocoes.push_back(new PocaoDef("Pocao de defesa", "Pocao que da defesa para voce", 100, 1, 1, 0, 50));
+    invPocoes.push_back(new PocaoDef("Pocao de defesa", "Pocao que da defesa para voce", 100, 1, 1, 0, 50));
+}
+
+std::string Aventureiro::getStats() const
+{
+
+    std::string str =
+        " | Name: " + this->getName() + " | Health: " + std::to_string(this->getMaxHp()) + "/" + std::to_string(this->getHp()) + " | Def: " + std::to_string(this->getDef()) + " | Dano: " + std::to_string(this->getMinDmg()) + " - " + std::to_string(this->getMaxDmg()) + " | Arma equipada: " + this->getArmaEquipada() +
+        " | Armadura Equipada: " + this->getArmaduraEquipada() + "\n";
+    return str;
 }
 
 // OPERATORS
@@ -53,9 +67,7 @@ std::ostream &operator<<(std::ostream &out, const Aventureiro &aventureiro)
     out
         << "Nome: " << aventureiro.getName() << std::endl;
     out << "Vida: " << aventureiro.getHp() << "/" << aventureiro.getMaxHp() << std::endl;
-    out << "Armadura: " << aventureiro.armor_.getArmor() << std::endl;
-    out << "Dano: " << aventureiro.magicWeapons_.getMinDmg() << " - " << aventureiro.magicWeapons_.getMaxDmg() << std::endl;
-    out << "Nivel: " << aventureiro.getLvl() << std::endl;
+    out << "Armadura: " << aventureiro.getDef() << std::endl;
     out << std::endl;
 
     return out;
@@ -76,28 +88,47 @@ void Aventureiro::setName(const std::string &name)
 
 void Aventureiro::setMaxHp(int hp)
 {
-    if (hp > 0 && hp < HP_CAP)
+    if (hp >= 0 && hp < HP_CAP)
     {
         max_hp_ = hp;
         hp_ = max_hp_;
         return;
     }
 
-    std::cout << "valor invalido (setMaxHp)\n";
+    std::cout << "valor invalido (setMaxHp) aven \n";
     max_hp_ = 0;
     hp_ = max_hp_;
 }
 
 void Aventureiro::setDef(int armor)
 {
+    if (armor_.getArmor() > 0)
+    {
+        def_ = armor_.getArmor();
+        return;
+    }
     if (armor >= 0 && armor < DEF_CAP)
     {
         def_ = armor;
         return;
     }
-
     std::cout << "valor invalido (setDef)\n";
     def_ = 0;
+}
+
+void Aventureiro::setHp(int hp)
+{
+    if (hp >= 0 && hp < getMaxHp())
+    {
+        hp_ = hp;
+        return;
+    }
+    if (hp > getMaxHp())
+    {
+        hp_ = getMaxHp();
+        return;
+    }
+    hp_ = 0;
 }
 
 // void Aventureiro::setDmg(int dmg)
@@ -110,17 +141,6 @@ void Aventureiro::setDef(int armor)
 //     std::cout << "valor invalido (setDmg)\n";
 //     dmg_ = 0;
 // }
-
-void Aventureiro::setLvl(int lvl)
-{
-    if (lvl > 0 && lvl < LVL_CAP)
-    {
-        lvl_ = lvl;
-        return;
-    }
-    std::cout << "valor invalido (setLvl)\n";
-    lvl_ = 0;
-}
 
 // GETS
 std::string Aventureiro::getName() const
@@ -143,14 +163,78 @@ int Aventureiro::getDef() const
     return def_;
 }
 
-// int Aventureiro::getDmg() const
-// {
-//     return dmg_;
-// }
-
-int Aventureiro::getLvl() const
+int Aventureiro::getMaxDmg() const
 {
-    return lvl_;
+
+    if (magicWeapons_.getQtd() > 0)
+    {
+        return magicWeapons_.getMaxDmg();
+    }
+    if (murasama_.getQtd() > 0)
+    {
+        return murasama_.getMaxDmg();
+    }
+    if (excalibur_.getQtd() > 0)
+    {
+        return excalibur_.getMaxDmg();
+    }
+    if (swords_.getQtd() > 0)
+    {
+        return swords_.getMaxDmg();
+    }
+}
+
+int Aventureiro::getMinDmg() const
+{
+
+    if (magicWeapons_.getQtd() > 0)
+    {
+        return magicWeapons_.getMinDmg();
+    }
+    if (murasama_.getQtd() > 0)
+    {
+        return murasama_.getMinDmg();
+    }
+    if (excalibur_.getQtd() > 0)
+    {
+        return excalibur_.getMinDmg();
+    }
+    if (swords_.getQtd() > 0)
+    {
+        return swords_.getMinDmg();
+    }
+}
+
+std::string Aventureiro::getArmaEquipada() const
+{
+
+    if (magicWeapons_.getQtd() > 0)
+    {
+        return magicWeapons_.getName();
+    }
+    if (murasama_.getQtd() > 0)
+    {
+        return murasama_.getName();
+    }
+    if (excalibur_.getQtd() > 0)
+    {
+        return excalibur_.getName();
+    }
+    if (swords_.getQtd() > 0)
+    {
+        return swords_.getName();
+    }
+    return "Nada equipado";
+}
+
+std::string Aventureiro::getArmaduraEquipada() const
+{
+
+    if (armor_.getQtd() > 0)
+    {
+        return armor_.getName();
+    }
+    return "Nada equipado";
 }
 
 void Aventureiro::equipItem(unsigned index)
@@ -171,21 +255,102 @@ void Aventureiro::equipItem(unsigned index)
         // Is weapon
         if (w != nullptr)
         {
-            MagicWeapons *mw = nullptr;
-            mw = dynamic_cast<MagicWeapons *>(&this->inventory[index]);
-
-            if (mw != nullptr)
+            if (typeid(*w).name() == typeid(MagicWeapons).name())
             {
                 if (this->magicWeapons_.getQtd() > 0)
                     this->inventory.addItem(this->magicWeapons_);
-                this->magicWeapons_ = *mw;
+
+                // check para impedir varias armas equipadas
+                if (this->murasama_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->murasama_);
+                    this->murasama_ = Murasama();
+                }
+                if (this->excalibur_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->excalibur_);
+                    this->excalibur_ = Excalibur();
+                }
+                if (this->swords_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->swords_);
+                    this->swords_ = Swords();
+                }
+                this->magicWeapons_ = *static_cast<MagicWeapons *>(&this->inventory[index]);
                 this->inventory.removeItem(index);
             }
+            else if (typeid(*w).name() == typeid(Murasama).name())
+            {
+                if (this->murasama_.getQtd() > 0)
+                    this->inventory.addItem(this->murasama_);
 
-            // else if (this->weapons_.getQtd() > 0)
-            //     this->inventory.addItem(this->weapons_);
-            // this->weapons_ = *w;
-            // this->inventory.removeItem(index);
+                // check para impedir varias armas equipadas
+                if (this->magicWeapons_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->magicWeapons_);
+                    this->magicWeapons_ = MagicWeapons();
+                }
+                if (this->excalibur_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->excalibur_);
+                    this->excalibur_ = Excalibur();
+                }
+                if (this->swords_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->swords_);
+                    this->swords_ = Swords();
+                }
+                this->murasama_ = *static_cast<Murasama *>(&this->inventory[index]);
+                this->inventory.removeItem(index);
+            }
+            else if (typeid(*w).name() == typeid(Excalibur).name())
+            {
+                if (this->excalibur_.getQtd() > 0)
+                    this->inventory.addItem(this->excalibur_);
+
+                // check para impedir varias armas equipadas
+                if (this->magicWeapons_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->magicWeapons_);
+                    this->magicWeapons_ = MagicWeapons();
+                }
+                if (this->murasama_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->murasama_);
+                    this->murasama_ = Murasama();
+                }
+                if (this->swords_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->swords_);
+                    this->swords_ = Swords();
+                }
+                this->excalibur_ = *static_cast<Excalibur *>(&this->inventory[index]);
+                this->inventory.removeItem(index);
+            }
+            else if (typeid(*w).name() == typeid(Swords).name())
+            {
+                if (this->swords_.getQtd() > 0)
+                    this->inventory.addItem(this->swords_);
+
+                // check para impedir varias armas equipadas
+                if (this->magicWeapons_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->magicWeapons_);
+                    this->magicWeapons_ = MagicWeapons();
+                }
+                if (this->murasama_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->murasama_);
+                    this->murasama_ = Murasama();
+                }
+                if (this->excalibur_.getQtd() > 0)
+                {
+                    this->inventory.addItem(this->excalibur_);
+                    this->excalibur_ = Excalibur();
+                }
+                this->swords_ = *static_cast<Swords *>(&this->inventory[index]);
+                this->inventory.removeItem(index);
+            }
         }
         else if (a != nullptr)
         {
@@ -193,6 +358,7 @@ void Aventureiro::equipItem(unsigned index)
                 this->inventory.addItem(this->armor_);
             this->armor_ = *a;
             this->inventory.removeItem(index);
+            setDef();
         }
         else
         {
@@ -245,8 +411,108 @@ std::string Aventureiro::getInv()
     return inv;
 }
 
+void Aventureiro::addItem(const Item &item)
+{
+    this->inventory.addItem(item);
+}
+
+const int Aventureiro::getInventorySize() const
+{
+    return this->inventory.size();
+}
+
 // COMBAT FUNCTIONS
 bool Aventureiro::isAlive() const
 {
     return this->hp_ > 0;
+}
+
+int Aventureiro::takeDamage(int damage)
+{
+    int totalDamage = damage - getDef();
+    if (totalDamage > 0)
+    {
+        hp_ -= totalDamage;
+        return totalDamage;
+    }
+    if (totalDamage < 0)
+    {
+        return totalDamage = 0;
+    }
+    if (this->hp_ <= 0)
+    {
+        this->hp_ = 0;
+        return totalDamage;
+    }
+}
+
+int Aventureiro::attack()
+{
+    if (magicWeapons_.getQtd() > 0)
+    {
+        return magicWeapons_.attack();
+    }
+    if (murasama_.getQtd() > 0)
+    {
+        return murasama_.attack();
+    }
+    if (excalibur_.getQtd() > 0)
+    {
+        return excalibur_.attack();
+    }
+    if (swords_.getQtd() > 0)
+    {
+        return swords_.attack();
+    }
+}
+
+// TRAVEL
+
+void Aventureiro::travel()
+{
+    this->distanceTravelled++;
+}
+const int &Aventureiro::getDistTravel() const
+{
+    return this->distanceTravelled;
+}
+void Aventureiro::setDistTravelled(const int &distance)
+{
+    this->distanceTravelled = distance;
+}
+
+void Aventureiro::usarPocao()
+{
+    int escolha;
+    int contador = 0;
+    for (const auto &str : invPocoes)
+        std::cout << *str << std::endl;
+    std::cout << "Escolha uma pocao para usar" << std::endl;
+    std::cin >> escolha;
+    for (Pocoes *i : invPocoes)
+    {
+        if (contador == escolha)
+        {
+            PocaoCura *cura = dynamic_cast<PocaoCura *>(i);
+            PocaoDef *def = dynamic_cast<PocaoDef *>(i);
+            if (cura != 0)
+            {
+                this->getStats();
+                this->setHp(this->getHp() + cura->getValorCura());
+                delete i;
+                invPocoes.erase(invPocoes.begin() + contador);
+            }
+            if (def != 0)
+            {
+                this->setDef(this->getDef() + def->getValorDef());
+                delete i;
+                invPocoes.erase(invPocoes.begin() + contador);
+            }
+            break;
+        }
+        PocaoCura *cura = dynamic_cast<PocaoCura *>(i);
+        std::cout << cura->getValorCura() << std::endl;
+        contador++;
+    }
+    std::cout << this->getStats() << std::endl;
 }
